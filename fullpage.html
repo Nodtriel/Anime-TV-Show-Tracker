@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime & Show Tracker - Full View</title>
+    <link rel="stylesheet" href="css/fullpage.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Anime & Show Tracker</h1>
+            <div class="header-buttons">
+                <button id="addBtn" class="btn-primary">+ Add New</button>
+                <button id="malImportBtn" class="btn-secondary" title="Import Anime from MAL XML">📤 MAL Import</button>
+                <button id="malExportBtn" class="btn-secondary" title="Export Anime in MAL XML format">📥 MAL Export</button>
+                <button id="tvImportBtn" class="btn-secondary" title="Import TV shows from JSON">📺 TV Import</button>
+                <button id="tvExportBtn" class="btn-secondary" title="Export TV shows as JSON">📺 TV Export</button>
+                <button id="clearBtn" class="btn-danger" title="Delete all tracked entries">⚠ Clear List</button>
+                <input type="file" id="malImportFile" accept=".xml" style="display: none;">
+                <input type="file" id="tvImportFile" accept=".json" style="display: none;">
+            </div>
+        </header>
+
+        <div class="filter-section">
+            <div class="filter-row">
+                <span class="filter-label">Type:</span>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="anime">Anime</button>
+                <button class="filter-btn" data-filter="tv">TV Shows</button>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">Status:</span>
+                <button class="filter-btn status-filter-btn active" data-status="all">All</button>
+                <button class="filter-btn status-filter-btn" data-status="watching">👀 Watching</button>
+                <button class="filter-btn status-filter-btn" data-status="ongoing">▶️ Ongoing</button>
+                <button class="filter-btn status-filter-btn" data-status="break">⏸️ Break</button>
+                <button class="filter-btn status-filter-btn" data-status="hiatus">⏸️ Hiatus</button>
+                <button class="filter-btn status-filter-btn" data-status="completed">✅ Completed</button>
+                <button class="filter-btn status-filter-btn" data-status="dropped">❌ Dropped</button>
+            </div>
+        </div>
+
+        <div id="malImportProgress" class="import-progress hidden" aria-live="polite">
+            <div class="import-progress-header">
+                <strong id="importProgressTitle">MAL Import in progress...</strong>
+                <span id="importProgressCount">0 / 0</span>
+            </div>
+            <div class="import-progress-bar-track">
+                <div id="importProgressBar" class="import-progress-bar-fill"></div>
+            </div>
+            <div id="importProgressStatus" class="import-progress-status">Preparing import...</div>
+            <div id="importProgressStats" class="import-progress-stats">Added: 0 | Covers: 0 | Failed: 0</div>
+        </div>
+
+        <main>
+            <div id="contentArea" class="content-area">
+                <div class="empty-state">
+                    <p>No shows added yet. Click "Add New" to get started!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding/editing shows -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Show</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="showForm">
+                <div class="form-group">
+                    <label for="showName">Show/Anime Name:</label>
+                    <input type="text" id="showName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="showType">Type:</label>
+                    <select id="showType" required>
+                        <option value="">Select Type</option>
+                        <option value="anime">Anime</option>
+                        <option value="tv">TV Show</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" required>
+                        <option value="">Select Status</option>
+                        <option value="watching">👀 Watching</option>
+                        <option value="ongoing">▶️ Ongoing</option>
+                        <option value="break">⏸️ Break</option>
+                        <option value="hiatus">⏸️ Hiatus</option>
+                        <option value="completed">✅ Completed</option>
+                        <option value="dropped">❌ Dropped</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="season">Current Season:</label>
+                    <input type="number" id="season" min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="episode">Current Episode:</label>
+                    <input type="number" id="episode" min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="watchLink">Watch Link:</label>
+                    <input type="url" id="watchLink" placeholder="https://example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="posterImage">Poster Image (URL):</label>
+                    <input type="url" id="posterImage" placeholder="https://example.com/image.jpg">
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <textarea id="notes" rows="3" placeholder="Any notes about the show..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Show</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/malImporter.js"></script>
+    <script src="js/fullpage.js"></script>
+</body>
+</html>

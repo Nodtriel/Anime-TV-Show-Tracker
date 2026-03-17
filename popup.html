@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime & Show Tracker</title>
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <div class="popup-header">
+            <h1>📺 Tracker</h1>
+            <button id="openFullView" class="btn-full-view" title="Open Full View">⛶</button>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="anime">Anime</button>
+            <button class="filter-btn" data-filter="tv">TV</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="showsTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Season</th>
+                        <th>Episode</th>
+                        <th>Status</th>
+                        <th>Link</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="showsBody">
+                    <tr class="empty-row">
+                        <td colspan="6">No shows added</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="popup-footer">
+            <button id="addShowBtn" class="btn-add">+ Add</button>
+        </div>
+    </div>
+    <script src="js/storage.js"></script>
+    <script src="js/popup.js"></script>
+</body>
+</html>

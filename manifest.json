@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Anime & Show Tracker",
+  "version": "1.0.0",
+  "description": "Track your favorite anime and TV shows with ease",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://api.jikan.moe/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Anime & Show Tracker"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  }
+}

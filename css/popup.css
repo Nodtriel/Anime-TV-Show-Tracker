@@ -1,0 +1,284 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 700px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: #121212;
+    color: #fff;
+}
+
+.popup-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #1a1a2e;
+    border-bottom: 1px solid #282828;
+}
+
+.popup-header h1 {
+    font-size: 16px;
+    color: #7c5cff;
+    margin: 0;
+    font-weight: 900;
+}
+
+.btn-full-view {
+    background: transparent;
+    border: 1px solid #7c5cff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    color: #7c5cff;
+}
+
+.btn-full-view:hover {
+    background: #7c5cff;
+    color: #000;
+}
+
+.filter-section {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #181818;
+    border-bottom: 1px solid #282828;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    border: 1px solid #404040;
+    background: transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    color: #b3b3b3;
+    font-weight: 600;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    border-color: #7c5cff;
+    background: #7c5cff;
+    color: #000;
+}
+
+.table-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #121212;
+}
+
+thead {
+    background: #181818;
+    position: sticky;
+    top: 0;
+}
+
+th {
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #b3b3b3;
+    border-bottom: 1px solid #282828;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 14px 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #282828;
+    color: #fff;
+}
+
+tbody tr {
+    transition: background 0.2s;
+    height: auto;
+    min-height: 42px;
+}
+
+tbody tr:hover {
+    background: #282828;
+}
+
+.empty-row {
+    text-align: center;
+    color: #b3b3b3;
+}
+
+.show-title {
+    font-weight: 600;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.show-title:hover {
+    color: #7c5cff;
+}
+
+.editable-title,
+.editable-season,
+.editable-episode,
+.editable-status {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.editable-title:hover,
+.editable-season:hover,
+.editable-episode:hover,
+.editable-status:hover {
+    background: #282828;
+    color: #7c5cff;
+}
+
+.inline-input,
+.inline-select {
+    background: #282828;
+    color: #fff;
+    border: 1px solid #7c5cff;
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-family: inherit;
+    min-width: 40px;
+    position: relative;
+    z-index: 1000;
+}
+
+.inline-input {
+    width: 50px;
+}
+
+.inline-input:focus {
+    outline: none;
+    border-color: #a78bff;
+    box-shadow: 0 0 4px rgba(122, 92, 255, 0.5);
+}
+
+.status-dropdown-menu {
+    position: absolute;
+    background: #1e1e1e;
+    border: 1px solid #7c5cff;
+    border-radius: 6px;
+    overflow: hidden;
+    z-index: 9999;
+    min-width: 140px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.status-dropdown-item {
+    padding: 7px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #d0d0d0;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.status-dropdown-item:hover {
+    background: #7c5cff;
+    color: #fff;
+}
+
+.status-dropdown-item.current {
+    color: #fff;
+    font-weight: 700;
+    background: #2d2040;
+}
+
+.status-cell {
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.show-link-cell {
+    max-width: 80px;
+}
+
+.show-link-cell a {
+    color: #7c5cff;
+    text-decoration: none;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.show-link-cell a:hover {
+    color: #a78bff;
+    text-decoration: underline;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-quick {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 4px;
+    transition: all 0.2s;
+    color: #b3b3b3;
+}
+
+.btn-quick:hover {
+    color: #7c5cff;
+    transform: scale(1.2);
+}
+
+.popup-footer {
+    padding: 12px 16px;
+    background: #181818;
+    border-top: 1px solid #282828;
+}
+
+.btn-add {
+    width: 100%;
+    padding: 8px;
+    background: #7c5cff;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-add:hover {
+    background: #a78bff;
+}
