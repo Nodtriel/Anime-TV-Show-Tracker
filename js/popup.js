@@ -65,7 +65,7 @@ class PopupTracker {
         const tbody = document.getElementById('showsBody');
         
         if (shows.length === 0) {
-            tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No shows added</td></tr>';
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No shows added</td></tr>';
             return;
         }
 

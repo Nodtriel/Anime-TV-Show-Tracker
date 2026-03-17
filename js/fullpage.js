@@ -4,6 +4,7 @@ class ShowTracker {
         this.currentFilter = 'all';
         this.currentStatusFilter = 'all';
         this.currentEditId = null;
+        this.initialFormState = null;
         this.init();
     }
 
@@ -78,9 +79,15 @@ class ShowTracker {
         });
 
         // Modal controls
-        document.querySelector('.close-btn').addEventListener('click', () => this.closeModal());
-        document.querySelector('.btn-cancel').addEventListener('click', () => this.closeModal());
+        document.querySelector('.close-btn').addEventListener('click', () => this.attemptCloseModal());
+        document.querySelector('.btn-cancel').addEventListener('click', () => this.attemptCloseModal());
+        document.getElementById('modalDeleteBtn').addEventListener('click', () => this.deleteCurrentShow());
         document.getElementById('showForm').addEventListener('submit', (e) => this.handleFormSubmit(e));
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                this.attemptCloseModal();
+            }
+        });
 
         // Image preview
         document.getElementById('posterImage').addEventListener('change', (e) => {
@@ -214,13 +221,6 @@ class ShowTracker {
             });
         });
 
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const showId = e.target.dataset.id;
-                this.deleteShow(showId);
-            });
-        });
-
         document.querySelectorAll('.btn-next-episode').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -294,7 +294,6 @@ class ShowTracker {
                     ${notesHtml}
                     <div class="show-actions">
                         <button class="btn-edit" data-id="${show.id}">✏️ Edit</button>
-                        <button class="btn-delete" data-id="${show.id}">🗑️ Delete</button>
                     </div>
                 </div>
             </div>
@@ -310,10 +309,11 @@ class ShowTracker {
         return messages[this.currentFilter];
     }
 
-    openModal(showId = null) {
+    async openModal(showId = null) {
         const modal = document.getElementById('modal');
         const form = document.getElementById('showForm');
         const modalTitle = document.getElementById('modalTitle');
+        const modalDeleteBtn = document.getElementById('modalDeleteBtn');
 
         form.reset();
         document.getElementById('imagePreview').innerHTML = '';
@@ -322,11 +322,14 @@ class ShowTracker {
 
         if (showId) {
             modalTitle.textContent = 'Edit Show';
-            this.loadShowIntoForm(showId);
+            modalDeleteBtn.style.display = 'block';
+            await this.loadShowIntoForm(showId);
         } else {
             modalTitle.textContent = 'Add New Show';
+            modalDeleteBtn.style.display = 'none';
         }
 
+        this.initialFormState = this.captureFormState();
         modal.classList.add('active');
     }
 
@@ -353,20 +356,45 @@ class ShowTracker {
     closeModal() {
         document.getElementById('modal').classList.remove('active');
         this.currentEditId = null;
+        this.initialFormState = null;
     }
 
-    updateImagePreview(url) {
-        const preview = document.getElementById('imagePreview');
-        if (url.trim()) {
-            preview.innerHTML = `<img src="${this.escapeHtml(url)}" alt="Preview" onerror="this.parentElement.innerHTML='Image failed to load'">`;
-        } else {
-            preview.innerHTML = '';
+    captureFormState() {
+        return {
+            name: document.getElementById('showName').value,
+            type: document.getElementById('showType').value,
+            status: document.getElementById('status').value,
+            season: document.getElementById('season').value,
+            episode: document.getElementById('episode').value,
+            watchLink: document.getElementById('watchLink').value,
+            posterImage: document.getElementById('posterImage').value,
+            notes: document.getElementById('notes').value
+        };
+    }
+
+    hasUnsavedChanges() {
+        if (!this.initialFormState) return false;
+        return JSON.stringify(this.captureFormState()) !== JSON.stringify(this.initialFormState);
+    }
+
+    async attemptCloseModal() {
+        const modal = document.getElementById('modal');
+        if (!modal.classList.contains('active')) return;
+
+        if (this.hasUnsavedChanges()) {
+            const shouldSave = confirm('You have unsaved changes. Do you want to save before closing?');
+
+            if (shouldSave) {
+                const saved = await this.saveFormData();
+                if (!saved) return;
+                this.loadShows();
+            }
         }
+
+        this.closeModal();
     }
 
-    async handleFormSubmit(e) {
-        e.preventDefault();
-
+    async saveFormData() {
         const showData = {
             name: document.getElementById('showName').value,
             type: document.getElementById('showType').value,
@@ -384,11 +412,28 @@ class ShowTracker {
             } else {
                 await storage.addShow(showData);
             }
-
-            this.closeModal();
-            this.loadShows();
+            return true;
         } catch (error) {
             alert('Error saving show: ' + error.message);
+            return false;
+        }
+    }
+
+    updateImagePreview(url) {
+        const preview = document.getElementById('imagePreview');
+        if (url.trim()) {
+            preview.innerHTML = `<img src="${this.escapeHtml(url)}" alt="Preview" onerror="this.parentElement.innerHTML='Image failed to load'">`;
+        } else {
+            preview.innerHTML = '';
+        }
+    }
+
+    async handleFormSubmit(e) {
+        e.preventDefault();
+        const saved = await this.saveFormData();
+        if (saved) {
+            this.closeModal();
+            this.loadShows();
         }
     }
 async quickNextEpisode(showId) {
@@ -437,6 +482,21 @@ async quickNextEpisode(showId) {
             } catch (error) {
                 alert('Error deleting show: ' + error.message);
             }
+        }
+    }
+
+    async deleteCurrentShow() {
+        if (!this.currentEditId) return;
+
+        const confirmed = confirm('Are you sure you want to delete this show?');
+        if (!confirmed) return;
+
+        try {
+            await storage.deleteShow(this.currentEditId);
+            this.closeModal();
+            this.loadShows();
+        } catch (error) {
+            alert('Error deleting show: ' + error.message);
         }
     }
 

@@ -615,6 +615,12 @@ main {
     margin-top: 20px;
 }
 
+#modalDeleteBtn {
+    display: none;
+    flex: 1;
+    margin-left: 0;
+}
+
 .btn-cancel {
     flex: 1;
     padding: 10px;
